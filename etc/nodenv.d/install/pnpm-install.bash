@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
+echo "Running nodenv-pnpm-install plugin..."
 set -e
 [ -n "$NODENV_DEBUG" ] && set -x
 
 if declare -Ff after_install > /dev/null; then
   after_install run_after_install
 else
-  echo "nodenv: nodenv-yarn-install plugin requires node-build" >&2
+  echo "nodenv: nodenv-pnpm-install plugin requires node-build" >&2
 fi
 
 run_after_install() {
   local node_version
-  local yarn_status
-  local yarn_version
+  local pnpm_status
+  local pnpm_version
 
   # Only if successfully installed Node.
   [ "$STATUS" = "0" ] || return 0
-  echo "Installing Yarn..."
+  echo "Installing pnpm..."
 
   node_version=$(NODENV_VERSION="$DEFINITION" nodenv-exec node -v)
   if [[ "$node_version" =~ ^v[0-3]\. ]]; then
@@ -24,11 +25,11 @@ run_after_install() {
     return 0
   fi
 
-  yarn_status=0
-  NODENV_VERSION="$DEFINITION" nodenv-exec npm install yarn -g --silent || yarn_status="$?"
+  pnpm_status=0
+  NODENV_VERSION="$DEFINITION" nodenv-exec npm install pnpm -g --silent || pnpm_status="$?"
 
-  if [ "$yarn_status" == "0" ]; then
-    yarn_version=$(NODENV_VERSION="$DEFINITION" nodenv-exec yarn --version)
-    echo "Installed Yarn $yarn_version"
+  if [ "$pnpm_status" == "0" ]; then
+    pnpm_version=$(NODENV_VERSION="$DEFINITION" nodenv-exec pnpm --version)
+    echo "Installed pnpm $pnpm_version"
   fi
 }
