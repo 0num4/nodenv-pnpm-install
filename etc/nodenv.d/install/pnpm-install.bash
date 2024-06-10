@@ -11,10 +11,12 @@ else
 fi
 
 run_after_install() {
+  echo "Running after_install..."
   local node_version
   local pnpm_status
   local pnpm_version
 
+  echo "Running after_install...2"
   # Only if successfully installed Node.
   [ "$STATUS" = "0" ] || return 0
   echo "Installing pnpm..."
@@ -26,7 +28,7 @@ run_after_install() {
   fi
 
   pnpm_status=0
-  NODENV_VERSION="$DEFINITION" nodenv-exec npm install pnpm -g --silent || pnpm_status="$?"
+  NODENV_VERSION="$DEFINITION" nodenv-exec npm install pnpm -g || pnpm_status="$?"
 
   if [ "$pnpm_status" == "0" ]; then
     pnpm_version=$(NODENV_VERSION="$DEFINITION" nodenv-exec pnpm --version)
